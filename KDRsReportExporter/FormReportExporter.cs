@@ -30,6 +30,7 @@ namespace KDRsReportExporter
             }
 
             btnExportPDF.Enabled = false;
+            btnexportEXCEL.Enabled = false;
             exp_Factory = new ExporterFactory(true);
             comboBoxDBs.DataSource = GetDBNames();
             //exp_Factory.setDate(DateTime.Now.AddDays(-1), DateTime.Now);
@@ -257,6 +258,12 @@ namespace KDRsReportExporter
             if (dt.Rows.Count != 0)
             {
                 btnExportPDF.Enabled = true;
+                btnexportEXCEL.Enabled = true;
+            }
+            else
+            {
+                btnExportPDF.Enabled = false;
+                btnexportEXCEL.Enabled = false;
             }
         }
 
@@ -269,6 +276,18 @@ namespace KDRsReportExporter
                 exp_Factory.fileName = Regex.Replace(SpName, "exp_", "", RegexOptions.IgnoreCase);
             }
             string fileName = exp_Factory.ExportToPDF(dt);
+            MessageBox.Show("PDF Export Succsefully to :\n" + fileName);
+        }
+
+        private void btnexportEXCEL_Click(object sender, EventArgs e)
+        {
+            exp_Factory.fileName = txtReportName.Text;
+
+            if (exp_Factory.fileName.Equals(""))
+            {
+                exp_Factory.fileName = Regex.Replace(SpName, "exp_", "", RegexOptions.IgnoreCase);
+            }
+            string fileName = exp_Factory.ExportToEXCEL(dt);
             MessageBox.Show("PDF Export Succsefully to :\n" + fileName);
         }
 

@@ -1,4 +1,5 @@
-﻿using iTextSharp.text;
+﻿using ClosedXML.Excel;
+using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;
 using System.Collections.Generic;
@@ -150,7 +151,8 @@ namespace KDRsReportExporter
             // Recipient e-mail address.
             foreach (String recipient in emailList)
             {
-                Msg.To.Add(recipient);
+                // Msg.To.Add(recipient);
+                Msg.Bcc.Add(recipient); // code for adding each email to Blindcopy copu so they do not see eachother.
             }
 
             // Assign the subject of our message.
@@ -170,6 +172,39 @@ namespace KDRsReportExporter
 
             // Send our email.
             client.Send(Msg);
+        }
+
+        public string ExportToEXCEL(DataTable dt)
+        {
+            string fileLocation = filePath + fileName + "_" + DateTime.Today.ToShortDateString() + ".xlsx";
+
+            PdfPCell cellH;
+            iTextSharp.text.Font ColFont3 = FontFactory.GetFont(FontFactory.HELVETICA, 10, iTextSharp.text.Font.NORMAL);
+            String ReportTime;
+            String PrintDate = ("Utskiftdato: " + DateTime.Today.ToShortDateString());
+            if (!startDate.Date.ToShortDateString().Equals("01.01.0001"))
+            {
+                ReportTime = ("Periode Fra : " + (startDate.ToShortDateString()) + "     Til : " + (endDate.ToShortDateString()));
+            }
+            else
+            {
+                ReportTime = ("No Date Is Set ");
+            }
+
+            XLWorkbook wb = new XLWorkbook();
+
+            var ws = wb.Worksheets.Add(dt, "Ark1");
+
+            ws.Row(1).InsertRowsAbove(5);
+            var LstColumnUsed = ws.LastColumnUsed();
+
+            var rngHeader = ws.Range(1, 1, 5, LstColumnUsed.ColumnNumber());
+            rngHeader.Style.Fill.BackgroundColor = XLColor.LightCyan;
+            rngHeader.Style.Font.Bold = true;
+            ws.Cell(3, 3).Value = ReportTime;
+            ws.Cell(5, LstColumnUsed.ColumnNumber()).Value = PrintDate;
+            wb.SaveAs(fileLocation);
+            return fileLocation;
         }
 
         public string ExportToPDF(DataTable dt)
@@ -213,12 +248,14 @@ namespace KDRsReportExporter
                 chunkCols1 = new Chunk("No Date Is Set ");
             }
 
-            cellH = new PdfPCell(new Paragraph(chunkCols1));
-            cellH.Colspan = dt.Columns.Count;
-            cellH.Border = 0;
-            cellH.HorizontalAlignment = Element.ALIGN_CENTER;
-            cellH.PaddingTop = 10;
-            cellH.PaddingBottom = 5;
+            cellH = new PdfPCell(new Paragraph(chunkCols1))
+            {
+                Colspan = dt.Columns.Count,
+                Border = 0,
+                HorizontalAlignment = Element.ALIGN_CENTER,
+                PaddingTop = 10,
+                PaddingBottom = 5
+            };
             table.AddCell(cellH);
 
             //Utskrift

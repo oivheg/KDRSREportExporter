@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReportExporter));
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.comboBoxDBs = new System.Windows.Forms.ComboBox();
             this.labelDBNames = new System.Windows.Forms.Label();
@@ -39,6 +40,8 @@
             this.buttonExecute = new System.Windows.Forms.Button();
             this.txtReportName = new System.Windows.Forms.TextBox();
             this.lblReportName = new System.Windows.Forms.Label();
+            this.btnexportEXCEL = new System.Windows.Forms.Button();
+            this.lblExport = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -85,7 +88,6 @@
             this.labelSPs.Size = new System.Drawing.Size(94, 13);
             this.labelSPs.TabIndex = 4;
             this.labelSPs.Text = "Stored procedures";
-          
             // 
             // comboBoxSPs
             // 
@@ -106,23 +108,23 @@
             this.groupBoxParameters.TabIndex = 5;
             this.groupBoxParameters.TabStop = false;
             this.groupBoxParameters.Text = "Parameters";
-           
             // 
             // btnExportPDF
             // 
-            this.btnExportPDF.Location = new System.Drawing.Point(194, 239);
+            this.btnExportPDF.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnExportPDF.BackgroundImage")));
+            this.btnExportPDF.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnExportPDF.Location = new System.Drawing.Point(192, 239);
             this.btnExportPDF.Name = "btnExportPDF";
-            this.btnExportPDF.Size = new System.Drawing.Size(132, 31);
+            this.btnExportPDF.Size = new System.Drawing.Size(78, 52);
             this.btnExportPDF.TabIndex = 9;
-            this.btnExportPDF.Text = "Exporter Til PDF";
             this.btnExportPDF.UseVisualStyleBackColor = true;
             this.btnExportPDF.Click += new System.EventHandler(this.btnExportPDF_Click);
             // 
             // buttonExecute
             // 
-            this.buttonExecute.Location = new System.Drawing.Point(38, 239);
+            this.buttonExecute.Location = new System.Drawing.Point(38, 228);
             this.buttonExecute.Name = "buttonExecute";
-            this.buttonExecute.Size = new System.Drawing.Size(132, 31);
+            this.buttonExecute.Size = new System.Drawing.Size(132, 63);
             this.buttonExecute.TabIndex = 8;
             this.buttonExecute.Text = "HentData";
             this.buttonExecute.UseVisualStyleBackColor = true;
@@ -130,27 +132,49 @@
             // 
             // txtReportName
             // 
-            this.txtReportName.Location = new System.Drawing.Point(344, 250);
+            this.txtReportName.Location = new System.Drawing.Point(360, 250);
             this.txtReportName.Name = "txtReportName";
-            this.txtReportName.Size = new System.Drawing.Size(209, 20);
+            this.txtReportName.Size = new System.Drawing.Size(193, 20);
             this.txtReportName.TabIndex = 10;
             this.txtReportName.TextChanged += new System.EventHandler(this.txtReportName_TextChanged);
             // 
             // lblReportName
             // 
             this.lblReportName.AutoSize = true;
-            this.lblReportName.Location = new System.Drawing.Point(341, 234);
+            this.lblReportName.Location = new System.Drawing.Point(357, 223);
             this.lblReportName.Name = "lblReportName";
-            this.lblReportName.Size = new System.Drawing.Size(67, 13);
+            this.lblReportName.Size = new System.Drawing.Size(114, 13);
             this.lblReportName.TabIndex = 11;
-            this.lblReportName.Text = "ReportName";
+            this.lblReportName.Text = "ReportName (ValgFritt)";
             this.lblReportName.Click += new System.EventHandler(this.lblReportName_Click);
+            // 
+            // btnexportEXCEL
+            // 
+            this.btnexportEXCEL.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnexportEXCEL.BackgroundImage")));
+            this.btnexportEXCEL.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.btnexportEXCEL.Location = new System.Drawing.Point(276, 239);
+            this.btnexportEXCEL.Name = "btnexportEXCEL";
+            this.btnexportEXCEL.Size = new System.Drawing.Size(78, 52);
+            this.btnexportEXCEL.TabIndex = 12;
+            this.btnexportEXCEL.UseVisualStyleBackColor = true;
+            this.btnexportEXCEL.Click += new System.EventHandler(this.btnexportEXCEL_Click);
+            // 
+            // lblExport
+            // 
+            this.lblExport.AutoSize = true;
+            this.lblExport.Location = new System.Drawing.Point(189, 223);
+            this.lblExport.Name = "lblExport";
+            this.lblExport.Size = new System.Drawing.Size(55, 13);
+            this.lblExport.TabIndex = 13;
+            this.lblExport.Text = "Eksporter:";
             // 
             // FormReportExporter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(586, 589);
+            this.Controls.Add(this.lblExport);
+            this.Controls.Add(this.btnexportEXCEL);
             this.Controls.Add(this.lblReportName);
             this.Controls.Add(this.txtReportName);
             this.Controls.Add(this.btnExportPDF);
@@ -182,6 +206,8 @@
         private System.Windows.Forms.Button buttonExecute;
         private System.Windows.Forms.TextBox txtReportName;
         private System.Windows.Forms.Label lblReportName;
+        private System.Windows.Forms.Button btnexportEXCEL;
+        private System.Windows.Forms.Label lblExport;
     }
 }
 

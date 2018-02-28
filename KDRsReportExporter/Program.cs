@@ -21,7 +21,7 @@ namespace KDRsReportExporter
             }
             else if (args[0].ToLower().Equals("day"))
             {
-                MessageBox.Show("This was Day");
+                //MessageBox.Show("This was Day");
                 //This takes the current day and send it as an argunment to the SQL stored procedure
                 ExporterFactory exp_Factory = new ExporterFactory(false);
                 exp_Factory.setDate(DateTime.Now.AddDays(-1).Date, DateTime.Now.AddDays(-1).Date);
