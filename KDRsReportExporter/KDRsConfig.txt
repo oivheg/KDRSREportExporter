@@ -1,0 +1,2 @@
+DataSource=TOYOTACARINA\SQLEXPRESS
+InitialCatalog=EnergiAdmin
