@@ -188,7 +188,7 @@ namespace KDRsReportExporter
             SqlDataAdapter sda = new SqlDataAdapter(cmd);
             sda.Fill(dt);
 
-            return dt;
+            return exp_Factory.FilterData(dt);
         }
 
         private List<string[]> GetParameters()
@@ -276,7 +276,7 @@ namespace KDRsReportExporter
                 exp_Factory.fileName = Regex.Replace(SpName, "exp_", "", RegexOptions.IgnoreCase);
             }
             string fileName = exp_Factory.ExportToPDF(dt);
-            MessageBox.Show("PDF Export Succsefully to :\n" + fileName);
+            MessageBox.Show("PDF: Exported Succsefully to :\n" + fileName);
         }
 
         private void btnexportEXCEL_Click(object sender, EventArgs e)
@@ -288,7 +288,7 @@ namespace KDRsReportExporter
                 exp_Factory.fileName = Regex.Replace(SpName, "exp_", "", RegexOptions.IgnoreCase);
             }
             string fileName = exp_Factory.ExportToEXCEL(dt);
-            MessageBox.Show("PDF Export Succsefully to :\n" + fileName);
+            MessageBox.Show("Excel: Exported Succsefully to :\n" + fileName);
         }
 
         private void txtReportName_TextChanged(object sender, EventArgs e)

@@ -1,6 +1,7 @@
 ﻿using ClosedXML.Excel;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.Office.Interop.Excel;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -15,7 +16,7 @@ namespace KDRsReportExporter
     internal class ExporterFactory
     {
         private string dataSource, catalog, sp_name, SMTP, eUser, ePwd, Subject, filePath;
-        private int SMTPport;
+        private int SMTPport, decimalCount = 2;
         private List<string> emailList = new List<string>();
 
         private Boolean isEmail;
@@ -33,7 +34,7 @@ namespace KDRsReportExporter
         {
             try
             {
-                string appPath = Application.StartupPath;
+                string appPath = System.Windows.Forms.Application.StartupPath;
                 string[] lines = System.IO.File.ReadAllLines(appPath + "\\KDRsConfig.txt");
                 char demiliter = '=';
                 dataSource = lines[0].Split(demiliter)[1];
@@ -41,6 +42,7 @@ namespace KDRsReportExporter
                 sp_name = lines[2].Split(demiliter)[1];
                 filePath = lines[3].Split(demiliter)[1];
                 fileName = lines[4].Split(demiliter)[1];
+                decimalCount = int.Parse(lines[5].Split(demiliter)[1]);
                 SMTP = lines[7].Split(demiliter)[1];
                 eUser = lines[8].Split(demiliter)[1];
                 ePwd = lines[9].Split(demiliter)[1];
@@ -111,10 +113,10 @@ namespace KDRsReportExporter
             endDate = _endDate;
         }
 
-        public DataTable GetData()
+        public System.Data.DataTable GetData()
         {
             //MessageBox.Show("We are getting data");
-            DataTable dt = new DataTable();
+            System.Data.DataTable dt = new System.Data.DataTable();
 
             SqlCommand cmd = new SqlCommand(sp_name, conn);
             cmd.CommandType = CommandType.StoredProcedure;
@@ -123,6 +125,28 @@ namespace KDRsReportExporter
             SqlDataAdapter sda = new SqlDataAdapter(cmd);
             sda.Fill(dt);
 
+            return FilterData(dt);
+        }
+
+        public System.Data.DataTable FilterData(System.Data.DataTable dt)
+        {
+            foreach (DataRow row in dt.Rows)
+            {
+                Console.WriteLine("--- Row ---");
+                for (int i = 0; i < dt.Columns.Count; i++)
+                {
+                    Console.Write("Item: "); // Print label.
+                    Console.WriteLine(row[i]);
+
+                    decimal Tryvalue = 2m;
+
+                    if (Decimal.TryParse(row[i].ToString() as string, out Tryvalue))
+                    {
+                        Decimal tmpdecimal = Decimal.Parse(row[i].ToString() as string);
+                        row[i] = Math.Round(tmpdecimal, decimalCount);
+                    }
+                }
+            }
             return dt;
         }
 
@@ -174,11 +198,11 @@ namespace KDRsReportExporter
             client.Send(Msg);
         }
 
-        public string ExportToEXCEL(DataTable dt)
+        public string ExportToEXCEL(System.Data.DataTable dt)
         {
             string fileLocation = filePath + fileName + "_" + DateTime.Today.ToShortDateString() + ".xlsx";
+            string OlderfileLocation = filePath + fileName + "_" + DateTime.Today.ToShortDateString() + ".xls";
 
-            PdfPCell cellH;
             iTextSharp.text.Font ColFont3 = FontFactory.GetFont(FontFactory.HELVETICA, 10, iTextSharp.text.Font.NORMAL);
             String ReportTime;
             String PrintDate = ("Utskiftdato: " + DateTime.Today.ToShortDateString());
@@ -204,10 +228,30 @@ namespace KDRsReportExporter
             ws.Cell(3, 3).Value = ReportTime;
             ws.Cell(5, LstColumnUsed.ColumnNumber()).Value = PrintDate;
             wb.SaveAs(fileLocation);
+
+            //object oMissing = Type.Missing;
+            //var excelApp = new Microsoft.Office.Interop.Excel.Application();
+            //// Make the object visible.
+            ////excelApp.Visible = true;
+
+            //// Create a new, empty workbook and add it to the collection returned
+            //// by property Workbooks. The new workbook becomes the active workbook.
+            //// Add has an optional parameter for specifying a praticular template.
+            //// Because no argument is sent in this example, Add creates a new workbook.
+            //var Workbook = excelApp.Workbooks.Add();
+
+            //// This example uses a single workSheet. The explicit type casting is
+            //// removed in a later procedure.
+            //Microsoft.Office.Interop.Excel._Worksheet workSheet = (Microsoft.Office.Interop.Excel.Worksheet)excelApp.ActiveSheet;
+            ////workSheet.Cells(wb);
+            //// wbOLD.SaveAs(OlderfileLocation, XlFileFormat.xlExcel8, Type.Missing, Type.Missing, Type.Missing, Type.Missing, XlSaveAsAccessMode.xlExclusive, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+            ////excelApp.Quit();
+            //Workbook.SaveAs(OlderfileLocation, Microsoft.Office.Interop.Excel.XlFileFormat.xlExcel8, Type.Missing, Type.Missing, Type.Missing, Type.Missing, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlExclusive, Type.Missing, Type.Missing, Type.Missing, Type.Missing);
+            //Workbook.Close();
             return fileLocation;
         }
 
-        public string ExportToPDF(DataTable dt)
+        public string ExportToPDF(System.Data.DataTable dt)
         {
             //Create a dummy GridView
             //MessageBox.Show("We are exporting PDF");
