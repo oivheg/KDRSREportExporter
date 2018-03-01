@@ -28,6 +28,8 @@ namespace KDRsReportExporter
             ConnectToDB(isrunning);
         }
 
+        public string periodeName { get; set; }
+
         public string fileName { get; set; }
 
         public void ReadDBSettings()
@@ -143,7 +145,12 @@ namespace KDRsReportExporter
                     if (Decimal.TryParse(row[i].ToString() as string, out Tryvalue))
                     {
                         Decimal tmpdecimal = Decimal.Parse(row[i].ToString() as string);
-                        row[i] = Math.Round(tmpdecimal, decimalCount);
+
+                        String value = String.Format("{0:0,0.00}", Convert.ToDecimal(tmpdecimal));
+                        tmpdecimal = Math.Round(tmpdecimal, decimalCount);
+                        tmpdecimal = Decimal.Parse(value);
+                        tmpdecimal = Math.Round(tmpdecimal, decimalCount);
+                        row[i] = tmpdecimal;
                     }
                 }
             }
@@ -208,7 +215,7 @@ namespace KDRsReportExporter
             String PrintDate = ("Utskiftdato: " + DateTime.Today.ToShortDateString());
             if (!startDate.Date.ToShortDateString().Equals("01.01.0001"))
             {
-                ReportTime = ("Periode Fra : " + (startDate.ToShortDateString()) + "     Til : " + (endDate.ToShortDateString()));
+                ReportTime = ReportPeriod();
             }
             else
             {
@@ -251,6 +258,11 @@ namespace KDRsReportExporter
             return fileLocation;
         }
 
+        private string ReportPeriod()
+        {
+            return ("Periode:" + periodeName + "   " + "Fra : " + (startDate.ToShortDateString()) + "     Til : " + (endDate.ToShortDateString()));
+        }
+
         public string ExportToPDF(System.Data.DataTable dt)
         {
             //Create a dummy GridView
@@ -285,7 +297,7 @@ namespace KDRsReportExporter
             Chunk chunkCols1;
             if (!startDate.Date.ToShortDateString().Equals("01.01.0001"))
             {
-                chunkCols1 = new Chunk("Periode Fra : " + (startDate.ToShortDateString()) + "     Til : " + (endDate.ToShortDateString()), ColFont3);
+                chunkCols1 = new Chunk(ReportPeriod());
             }
             else
             {

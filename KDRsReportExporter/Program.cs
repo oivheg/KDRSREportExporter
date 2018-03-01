@@ -26,6 +26,7 @@ namespace KDRsReportExporter
                 ExporterFactory exp_Factory = new ExporterFactory(false);
                 exp_Factory.setDate(DateTime.Now.AddDays(-1).Date, DateTime.Now.AddDays(-1).Date);
                 DataTable dt = exp_Factory.GetData();
+                exp_Factory.periodeName = "Day";
                 string fileName = exp_Factory.ExportToPDF(dt);
                 exp_Factory.SendEmail(fileName);
             }
@@ -36,6 +37,7 @@ namespace KDRsReportExporter
                 exp_Factory.setDate(DateTime.Now.AddDays(-8).Date, DateTime.Now.AddDays(-1).Date);
 
                 DataTable dt = exp_Factory.GetData();
+                exp_Factory.periodeName = "Week";
                 string fileName = exp_Factory.ExportToPDF(dt);
                 exp_Factory.SendEmail(fileName);
             }
@@ -45,6 +47,7 @@ namespace KDRsReportExporter
                 exp_Factory.setDate(DateTime.Now.AddMonths(-1).Date, DateTime.Now.AddDays(-1).Date);
 
                 DataTable dt = exp_Factory.GetData();
+                exp_Factory.periodeName = "Month";
                 string fileName = exp_Factory.ExportToPDF(dt);
                 exp_Factory.SendEmail(fileName);
             }
