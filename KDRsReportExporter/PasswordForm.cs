@@ -12,6 +12,7 @@ namespace KDRsReportExporter
         public PasswordForm()
         {
             InitializeComponent();
+            pwBox.KeyDown += new KeyEventHandler(tb_KeyDown);
         }
 
         private void InitializeComponent()
@@ -21,41 +22,56 @@ namespace KDRsReportExporter
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            //
+            // 
             // pwBox
-            //
+            // 
             this.pwBox.Location = new System.Drawing.Point(87, 102);
             this.pwBox.Name = "pwBox";
             this.pwBox.PasswordChar = '*';
             this.pwBox.Size = new System.Drawing.Size(100, 20);
             this.pwBox.TabIndex = 0;
-            //
+            // 
             // contextMenuStrip1
-            //
+            // 
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
-            //
+            // 
             // button1
-            //
+            // 
             this.button1.Location = new System.Drawing.Point(87, 141);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(100, 23);
             this.button1.TabIndex = 2;
             this.button1.Text = "Finish";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Visible = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            //
+            // 
             // PasswordForm
-            //
+            // 
             this.ClientSize = new System.Drawing.Size(284, 261);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.pwBox);
             this.Name = "PasswordForm";
             this.ResumeLayout(false);
             this.PerformLayout();
+
+        }
+
+        private void tb_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                Login();
+            }
         }
 
         private void button1_Click(object sender, System.EventArgs e)
+        {
+            Login();
+        }
+
+        private void Login()
         {
             if (pwBox.Text == "system11")
             {
