@@ -125,36 +125,51 @@ namespace KDRsReportExporter
             cmd.Parameters.Add(new SqlParameter("@startdate", startDate));
             cmd.Parameters.Add(new SqlParameter("@enddate", endDate));
             SqlDataAdapter sda = new SqlDataAdapter(cmd);
+
             sda.Fill(dt);
 
-            return FilterData(dt);
+            return FilterDataTable(dt);
         }
 
-        public System.Data.DataTable FilterData(System.Data.DataTable dt)
+        public System.Data.DataTable FilterDataTable(System.Data.DataTable dt)
         {
+            List<string> colNames = new List<string>();
+            System.Data.DataTable dtCloned = dt.Clone();
+            foreach (DataColumn c in dt.Columns)
+            {
+                if (c.DataType == typeof(Decimal) | c.DataType == typeof(int))
+                {
+                    dtCloned.Columns[c.ColumnName].DataType = typeof(string);
+                    colNames.Add(c.ColumnName);
+                }
+            }
             foreach (DataRow row in dt.Rows)
             {
-                Console.WriteLine("--- Row ---");
-                for (int i = 0; i < dt.Columns.Count; i++)
+                dtCloned.ImportRow(row);
+            }
+
+            foreach (DataRow dr in dtCloned.Rows)
+            {
+                foreach (DataColumn dc in dtCloned.Columns)
                 {
-                    Console.Write("Item: "); // Print label.
-                    Console.WriteLine(row[i]);
-
-                    decimal Tryvalue = 2m;
-
-                    if (Decimal.TryParse(row[i].ToString() as string, out Tryvalue))
+                    if (colNames.Contains(dc.ColumnName))
                     {
-                        Decimal tmpdecimal = Decimal.Parse(row[i].ToString() as string);
+                        string whatYouWant = "";
+                        double dts = Convert.ToDouble(dr[dc]);
+                        if (decimalCount == 0)
+                        {
+                            whatYouWant = dts.ToString("#,##0");
+                        }
+                        else if (decimalCount == 2)
+                        {
+                            whatYouWant = dts.ToString("#,##0.00");
+                        }
 
-                        String value = String.Format("{0:0,0.00}", Convert.ToDecimal(tmpdecimal));
-                        tmpdecimal = Math.Round(tmpdecimal, decimalCount);
-                        tmpdecimal = Decimal.Parse(value);
-                        tmpdecimal = Math.Round(tmpdecimal, decimalCount);
-                        row[i] = tmpdecimal;
+                        dr[dc] = whatYouWant;
                     }
                 }
             }
-            return dt;
+            return dtCloned;
         }
 
         public void SendEmail(String attachmentFile)

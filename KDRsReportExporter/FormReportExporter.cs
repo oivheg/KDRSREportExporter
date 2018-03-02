@@ -188,7 +188,7 @@ namespace KDRsReportExporter
             SqlDataAdapter sda = new SqlDataAdapter(cmd);
             sda.Fill(dt);
 
-            return exp_Factory.FilterData(dt);
+            return exp_Factory.FilterDataTable(dt);
         }
 
         private List<string[]> GetParameters()
@@ -255,6 +255,7 @@ namespace KDRsReportExporter
         {
             dt = ExecuteSP(GetParameters());
             dataGridView.DataSource = dt;
+
             if (dt.Rows.Count != 0)
             {
                 btnExportPDF.Enabled = true;
