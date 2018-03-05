@@ -15,7 +15,7 @@ namespace KDRsReportExporter
 {
     internal class ExporterFactory
     {
-        private string dataSource, catalog, sp_name, SMTP, eUser, ePwd, Subject, filePath;
+        private string dataSource, catalog, sp_name, SMTP, eUser, ePwd, Subject, filePath, bodyHead, bodyMain, bodySignature;
         private int SMTPport, decimalCount = 2;
         private List<string> emailList = new List<string>();
 
@@ -50,7 +50,9 @@ namespace KDRsReportExporter
                 ePwd = lines[9].Split(demiliter)[1];
                 SMTPport = int.Parse(lines[10].Split(demiliter)[1]);
                 Subject = lines[11].Split(demiliter)[1];
-
+                bodyHead = lines[12].Split(demiliter)[1];
+                bodyMain = lines[13].Split(demiliter)[1];
+                bodySignature = lines[14].Split(demiliter)[1];
                 if (!Directory.Exists(filePath))
                 {
                     Directory.CreateDirectory(filePath);
@@ -142,6 +144,12 @@ namespace KDRsReportExporter
                     dtCloned.Columns[c.ColumnName].DataType = typeof(string);
                     colNames.Add(c.ColumnName);
                 }
+                //var value = 2m;
+                //if (decimal.TryParse(c.ColumnName, out value))
+                //{
+                //    dtCloned.Columns[c.ColumnName].DataType = typeof(string);
+                //    colNames.Add(c.ColumnName);
+                //}
             }
             foreach (DataRow row in dt.Rows)
             {
@@ -205,7 +213,7 @@ namespace KDRsReportExporter
             Msg.Subject = Subject;
 
             // Create the content(body) of our message.
-            Msg.Body = "";
+            Msg.Body = bodyHead + " \r\n" + " \r\n" + bodyMain + " \r\n" + " \r\n" + bodySignature;
 
             Attachment attach = new Attachment(attachmentFile);
 
