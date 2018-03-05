@@ -130,29 +130,56 @@ namespace KDRsReportExporter
 
             sda.Fill(dt);
 
-            return FilterDataTable(dt);
+            return FormatDataTable(dt);
         }
 
-        public System.Data.DataTable FilterDataTable(System.Data.DataTable dt)
+        public System.Data.DataTable FormatDataTable(System.Data.DataTable dt)
         {
             List<string> colNames = new List<string>();
+            List<string> DateNames = new List<string>();
+            string DepartmentColumn = "";
             System.Data.DataTable dtCloned = dt.Clone();
             foreach (DataColumn c in dt.Columns)
             {
+                if (c.DataType == typeof(String))
+                {
+                    if (c.ColumnName.Equals("AvdelingsNavn"))
+                    {
+                        DepartmentColumn = c.ColumnName;
+                    }
+                }
                 if (c.DataType == typeof(Decimal) | c.DataType == typeof(int))
                 {
                     dtCloned.Columns[c.ColumnName].DataType = typeof(string);
                     colNames.Add(c.ColumnName);
                 }
-                //var value = 2m;
-                //if (decimal.TryParse(c.ColumnName, out value))
+                //if (c.DataType == typeof(DateTime))
                 //{
-                //    dtCloned.Columns[c.ColumnName].DataType = typeof(string);
-                //    colNames.Add(c.ColumnName);
+                //    DateNames.Add(c.ColumnName);
                 //}
             }
+            String lstDepartment = "";
             foreach (DataRow row in dt.Rows)
             {
+                if (DepartmentColumn != "")
+                {
+                    String Departmentname = row.Field<String>("AvdelingsNavn");
+                    if (!lstDepartment.Equals(Departmentname))
+                    {
+                        DataRow row2 = dtCloned.NewRow();
+                        // probalby set background color here somehow
+                        row2.SetField("AvdelingsNavn", Departmentname);
+                        row.SetField("AvdelingsNavn", "");
+
+                        dtCloned.Rows.Add(row2);
+
+                        lstDepartment = Departmentname;
+                    }
+                    else
+                    {
+                        row.SetField("AvdelingsNavn", "");
+                    }
+                }
                 dtCloned.ImportRow(row);
             }
 
@@ -162,21 +189,36 @@ namespace KDRsReportExporter
                 {
                     if (colNames.Contains(dc.ColumnName))
                     {
+                        double value;
                         string whatYouWant = "";
-                        double dts = Convert.ToDouble(dr[dc]);
-                        if (decimalCount == 0)
+                        double dts = 00;
+                        if (double.TryParse((dr[dc]).ToString(), out value))
                         {
-                            whatYouWant = dts.ToString("#,##0");
-                        }
-                        else if (decimalCount == 2)
-                        {
-                            whatYouWant = dts.ToString("#,##0.00");
-                        }
+                            dts = Convert.ToDouble(dr[dc]);
 
-                        dr[dc] = whatYouWant;
+                            if (decimalCount == 0)
+                            {
+                                whatYouWant = dts.ToString("#,##0");
+                            }
+                            else if (decimalCount == 2)
+                            {
+                                whatYouWant = dts.ToString("#,##0.00");
+                            }
+
+                            dr[dc] = whatYouWant;
+                        }
                     }
+                    //if (DateNames.Contains(dc.ColumnName))
+                    //{
+                    //    if (!dr[dc].Equals(null))
+                    //    {
+                    //        DateTime tmpDateTime = Convert.ToDateTime(dr[dc]);
+                    //        dr[dc] = Convert.ToDateTime(dr[dc]);
+                    //    }
+                    //}
                 }
             }
+
             return dtCloned;
         }
 

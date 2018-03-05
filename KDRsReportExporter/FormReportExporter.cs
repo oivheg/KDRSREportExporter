@@ -188,7 +188,7 @@ namespace KDRsReportExporter
             SqlDataAdapter sda = new SqlDataAdapter(cmd);
             sda.Fill(dt);
 
-            return exp_Factory.FilterDataTable(dt);
+            return exp_Factory.FormatDataTable(dt);
         }
 
         private List<string[]> GetParameters()
