@@ -22,17 +22,40 @@ namespace KDRsReportExporter
 
         private void FormReportExporter_Load(object sender, EventArgs e)
         {
-            PasswordForm frm = new PasswordForm();
-            if (frm.ShowDialog() != DialogResult.OK)
-            {
-                // The user canceled.
-                this.Close();
-            }
-
+            //PasswordForm frm = new PasswordForm();
+            //if (frm.ShowDialog() != DialogResult.OK)
+            //{
+            //    // The user canceled.
+            //    this.Close();
+            //}
+           
             btnExportPDF.Enabled = false;
             btnexportEXCEL.Enabled = false;
             exp_Factory = new ExporterFactory(true);
-            comboBoxDBs.DataSource = GetDBNames();
+           
+            if (exp_Factory.BisLocked)
+            {
+                this.Text = exp_Factory.ProgTittle;
+                txtReportName.Text = exp_Factory.ReportName;
+
+
+                comboBoxDBs.Items.Add(exp_Factory.GetCatalog());
+                comboBoxSPs.Items.Add(exp_Factory.GetSpName());
+                comboBoxDBs.SelectedIndex = 0;
+                comboBoxSPs.SelectedIndex = 0;
+                comboBoxDBs.Enabled = false;
+                comboBoxSPs.Enabled = false;
+                comboBoxDBs.Visible = false;
+                comboBoxSPs.Visible = false;
+                labelSPs.Visible = false;
+                labelDBNames.Visible = false;
+            }
+            else
+            {
+                comboBoxDBs.DataSource = GetDBNames();
+                
+            }
+            
             //exp_Factory.setDate(DateTime.Now.AddDays(-1), DateTime.Now);
             //DataTable dt = exp_Factory.GetData();
             //dataGridView.DataSource = dt;
@@ -237,7 +260,11 @@ namespace KDRsReportExporter
         {
             //here
             DBName = (sender as ComboBox).Text;
-            FillStoredProcedures();
+            if (!exp_Factory.BisLocked)
+            {
+  FillStoredProcedures();
+            }
+          
             //ChangeInitialCatalog((newDBName));
         }
 

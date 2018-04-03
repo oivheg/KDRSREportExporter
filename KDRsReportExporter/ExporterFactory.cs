@@ -15,13 +15,28 @@ namespace KDRsReportExporter
 {
     internal class ExporterFactory
     {
-        private string dataSource, catalog, sp_name, SMTP, eUser, ePwd, Subject, filePath, bodyHead, bodyMain, bodySignature;
+        private string dataSource, catalog, sp_name, SMTP, eUser, ePwd, Subject, filePath, bodyHead, bodyMain, bodySignature, isLocked;
         private int SMTPport, decimalCount = 2;
         private List<string> emailList = new List<string>();
-
+       
+        public Boolean BisLocked { get; set; }
         private Boolean isEmail;
         public SqlConnection conn;
 
+        public string GetCatalog()
+        {
+            return catalog;
+
+        }
+
+        public string GetSpName()
+        {
+            return sp_name;
+
+        }
+
+        public string ReportName { get; set; }
+        public string ProgTittle { get; set; }
         public ExporterFactory(Boolean isrunning)
         {
             ReadDBSettings();
@@ -39,20 +54,29 @@ namespace KDRsReportExporter
                 string appPath = System.Windows.Forms.Application.StartupPath;
                 string[] lines = System.IO.File.ReadAllLines(appPath + "\\KDRsConfig.txt");
                 char demiliter = '=';
-                dataSource = lines[0].Split(demiliter)[1];
-                catalog = lines[1].Split(demiliter)[1];
-                sp_name = lines[2].Split(demiliter)[1];
-                filePath = lines[3].Split(demiliter)[1];
-                fileName = lines[4].Split(demiliter)[1];
-                decimalCount = int.Parse(lines[5].Split(demiliter)[1]);
-                SMTP = lines[7].Split(demiliter)[1];
-                eUser = lines[8].Split(demiliter)[1];
-                ePwd = lines[9].Split(demiliter)[1];
-                SMTPport = int.Parse(lines[10].Split(demiliter)[1]);
-                Subject = lines[11].Split(demiliter)[1];
-                bodyHead = lines[12].Split(demiliter)[1];
-                bodyMain = lines[13].Split(demiliter)[1];
-                bodySignature = lines[14].Split(demiliter)[1];
+               //is LOCKED
+                isLocked = lines[0].Split(demiliter)[1];
+                ReportName = lines[2].Split(demiliter)[1];
+                ProgTittle = lines[3].Split(demiliter)[1];
+                //DATA
+                dataSource = lines[5].Split(demiliter)[1];
+                catalog = lines[6].Split(demiliter)[1];
+                sp_name = lines[7].Split(demiliter)[1];
+                filePath = lines[8].Split(demiliter)[1];
+                fileName = lines[9].Split(demiliter)[1];
+                decimalCount = int.Parse(lines[10].Split(demiliter)[1]);
+
+                //EMAIL - SETTINGS
+                SMTP = lines[12].Split(demiliter)[1];
+                eUser = lines[13].Split(demiliter)[1];
+                ePwd = lines[14].Split(demiliter)[1];
+                SMTPport = int.Parse(lines[15].Split(demiliter)[1]);
+
+                //EMAIL
+                Subject = lines[16].Split(demiliter)[1];
+                bodyHead = lines[17].Split(demiliter)[1];
+                bodyMain = lines[18].Split(demiliter)[1];
+                bodySignature = lines[19].Split(demiliter)[1];
                 if (!Directory.Exists(filePath))
                 {
                     Directory.CreateDirectory(filePath);
@@ -70,6 +94,12 @@ namespace KDRsReportExporter
                     {
                         isEmail = true;
                     }
+                }
+
+
+                if (isLocked.ToLower().Equals("yes"))
+                {
+                    BisLocked = true;
                 }
             }
             catch (Exception e)
@@ -143,7 +173,7 @@ namespace KDRsReportExporter
             {
                 if (c.DataType == typeof(String))
                 {
-                    if (c.ColumnName.Equals("AvdelingsNavn"))
+                    if (c.ColumnName.Equals("Avdelings Navn"))
                     {
                         DepartmentColumn = c.ColumnName;
                     }
@@ -163,13 +193,13 @@ namespace KDRsReportExporter
             {
                 if (DepartmentColumn != "")
                 {
-                    String Departmentname = row.Field<String>("AvdelingsNavn");
+                    String Departmentname = row.Field<String>("Avdelings Navn");
                     if (!lstDepartment.Equals(Departmentname))
                     {
                         DataRow row2 = dtCloned.NewRow();
                         // probalby set background color here somehow
-                        row2.SetField("AvdelingsNavn", Departmentname);
-                        row.SetField("AvdelingsNavn", "");
+                        row2.SetField("Avdelings Navn", Departmentname);
+                        row.SetField("Avdelings Navn", "");
 
                         dtCloned.Rows.Add(row2);
 
@@ -177,7 +207,7 @@ namespace KDRsReportExporter
                     }
                     else
                     {
-                        row.SetField("AvdelingsNavn", "");
+                        row.SetField("Avdelings Navn", "");
                     }
                 }
                 dtCloned.ImportRow(row);
