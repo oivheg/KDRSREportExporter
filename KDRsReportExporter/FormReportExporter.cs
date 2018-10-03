@@ -33,6 +33,8 @@ namespace KDRsReportExporter
 
             btnExportPDF.Enabled = false;
             btnexportEXCEL.Enabled = false;
+            btnexportEXCEL.Click += btnexportEXCEL_Click;
+            btnExportPDF.Click += btnExportPDF_Click;
             exp_Factory = new ExporterFactory(true);
 
             if (exp_Factory.BisLocked)
@@ -246,7 +248,9 @@ namespace KDRsReportExporter
                     deptListbox.Name = spParam[0];
 
                     deptListbox.CheckOnClick = true;
+
                     GetDepartments(deptListbox);
+
                     deptListbox.Location = new Point(xPos + lblText.Width, yPos);
                     groupBoxParameters.Controls.Add(deptListbox);
                 }
@@ -255,6 +259,7 @@ namespace KDRsReportExporter
                     CheckBox chcbox = new CheckBox();
 
                     chcbox.Name = spParam[0];
+
                     chcbox.Location = new Point(xPos + lblText.Width, yPos);
                     groupBoxParameters.Controls.Add(chcbox);
                 }
@@ -453,6 +458,10 @@ namespace KDRsReportExporter
             {
                 deptListbox.SetItemChecked(i, Selected);
             }
+        }
+
+        private void btnExportPDF_Click_1(object sender, EventArgs e)
+        {
         }
     }
 }

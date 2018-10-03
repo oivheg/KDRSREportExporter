@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReportExporter));
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.comboBoxDBs = new System.Windows.Forms.ComboBox();
@@ -40,9 +40,9 @@
             this.filterbox = new System.Windows.Forms.GroupBox();
             this.lblExport = new System.Windows.Forms.Label();
             this.btnexportEXCEL = new System.Windows.Forms.Button();
+            this.btnExportPDF = new System.Windows.Forms.Button();
             this.lblReportName = new System.Windows.Forms.Label();
             this.txtReportName = new System.Windows.Forms.TextBox();
-            this.btnExportPDF = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.filterbox.SuspendLayout();
             this.SuspendLayout();
@@ -51,8 +51,8 @@
             // 
             this.dataGridView.AllowUserToAddRows = false;
             this.dataGridView.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.dataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.dataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -156,6 +156,17 @@
             this.btnexportEXCEL.TabIndex = 17;
             this.btnexportEXCEL.UseVisualStyleBackColor = true;
             // 
+            // btnExportPDF
+            // 
+            this.btnExportPDF.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnExportPDF.BackgroundImage")));
+            this.btnExportPDF.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.btnExportPDF.Location = new System.Drawing.Point(176, 33);
+            this.btnExportPDF.Name = "btnExportPDF";
+            this.btnExportPDF.Size = new System.Drawing.Size(78, 52);
+            this.btnExportPDF.TabIndex = 14;
+            this.btnExportPDF.UseVisualStyleBackColor = true;
+            this.btnExportPDF.Click += new System.EventHandler(this.btnExportPDF_Click_1);
+            // 
             // lblReportName
             // 
             this.lblReportName.AutoSize = true;
@@ -171,16 +182,6 @@
             this.txtReportName.Name = "txtReportName";
             this.txtReportName.Size = new System.Drawing.Size(193, 20);
             this.txtReportName.TabIndex = 15;
-            // 
-            // btnExportPDF
-            // 
-            this.btnExportPDF.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("btnExportPDF.BackgroundImage")));
-            this.btnExportPDF.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.btnExportPDF.Location = new System.Drawing.Point(176, 33);
-            this.btnExportPDF.Name = "btnExportPDF";
-            this.btnExportPDF.Size = new System.Drawing.Size(78, 52);
-            this.btnExportPDF.TabIndex = 14;
-            this.btnExportPDF.UseVisualStyleBackColor = true;
             // 
             // FormReportExporter
             // 
