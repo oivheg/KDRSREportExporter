@@ -459,9 +459,5 @@ namespace KDRsReportExporter
                 deptListbox.SetItemChecked(i, Selected);
             }
         }
-
-        private void btnExportPDF_Click_1(object sender, EventArgs e)
-        {
-        }
     }
 }
