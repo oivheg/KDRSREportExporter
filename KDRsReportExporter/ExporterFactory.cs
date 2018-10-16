@@ -15,10 +15,11 @@ namespace KDRsReportExporter
 {
     internal class ExporterFactory
     {
-        private string dataSource, catalog, sp_name, SMTP, eUser, ePwd, Subject, filePath, bodyHead, bodyMain, bodySignature, isLocked;
+        private string dataSource, catalog, selectSpName, SMTP, eUser, ePwd, Subject, filePath, bodyHead, bodyMain, bodySignature, isLocked;
+        private List<string> sp_names = new List<string>();
         private int SMTPport, decimalCount = 2;
         private List<string> emailList = new List<string>();
-       
+
         public Boolean BisLocked { get; set; }
         private Boolean isEmail;
         public SqlConnection conn;
@@ -26,17 +27,16 @@ namespace KDRsReportExporter
         public string GetCatalog()
         {
             return catalog;
-
         }
 
-        public string GetSpName()
+        public List<string> GetSpName()
         {
-            return sp_name;
-
+            return sp_names;
         }
 
         public string ReportName { get; set; }
         public string ProgTittle { get; set; }
+
         public ExporterFactory(Boolean isrunning)
         {
             ReadDBSettings();
@@ -54,14 +54,21 @@ namespace KDRsReportExporter
                 string appPath = System.Windows.Forms.Application.StartupPath;
                 string[] lines = System.IO.File.ReadAllLines(appPath + "\\KDRsConfig.txt");
                 char demiliter = '=';
-               //is LOCKED
+                char semicolon = ';';
+                //is LOCKED
                 isLocked = lines[0].Split(demiliter)[1];
                 ReportName = lines[2].Split(demiliter)[1];
                 ProgTittle = lines[3].Split(demiliter)[1];
                 //DATA
                 dataSource = lines[5].Split(demiliter)[1];
                 catalog = lines[6].Split(demiliter)[1];
-                sp_name = lines[7].Split(demiliter)[1];
+                var lstSpnames = lines[7].Split(demiliter)[1];
+                var spltlstSpnames = lstSpnames.Split(semicolon);
+                foreach (var sp in spltlstSpnames)
+                {
+                    sp_names.Add(sp);
+                }
+
                 filePath = lines[8].Split(demiliter)[1];
                 fileName = lines[9].Split(demiliter)[1];
                 decimalCount = int.Parse(lines[10].Split(demiliter)[1]);
@@ -95,7 +102,6 @@ namespace KDRsReportExporter
                         isEmail = true;
                     }
                 }
-
 
                 if (isLocked.ToLower().Equals("yes"))
                 {
@@ -151,8 +157,8 @@ namespace KDRsReportExporter
         {
             //MessageBox.Show("We are getting data");
             System.Data.DataTable dt = new System.Data.DataTable();
-
-            SqlCommand cmd = new SqlCommand(sp_name, conn);
+            selectSpName = sp_names[0];
+            SqlCommand cmd = new SqlCommand(selectSpName, conn);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.Add(new SqlParameter("@startdate", startDate));
             cmd.Parameters.Add(new SqlParameter("@enddate", endDate));

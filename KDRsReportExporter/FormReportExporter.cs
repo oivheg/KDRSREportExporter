@@ -18,7 +18,7 @@ namespace KDRsReportExporter
 
         private ExporterFactory exp_Factory;
         private String DBName;
-        private String SpName;
+        private String SelectSpName;
         private DataTable dt;
         private DataTable dept;
 
@@ -43,14 +43,18 @@ namespace KDRsReportExporter
                 txtReportName.Text = exp_Factory.ReportName;
 
                 comboBoxDBs.Items.Add(exp_Factory.GetCatalog());
-                comboBoxSPs.Items.Add(exp_Factory.GetSpName());
+                foreach (var item in exp_Factory.GetSpName())
+                {
+                    comboBoxSPs.Items.Add(item);
+                }
+
                 comboBoxDBs.SelectedIndex = 0;
                 comboBoxSPs.SelectedIndex = 0;
                 comboBoxDBs.Enabled = false;
-                comboBoxSPs.Enabled = false;
+                comboBoxSPs.Enabled = true;
                 comboBoxDBs.Visible = false;
-                comboBoxSPs.Visible = false;
-                labelSPs.Visible = false;
+                comboBoxSPs.Visible = true;
+                labelSPs.Visible = true;
                 labelDBNames.Visible = false;
             }
             else
@@ -203,7 +207,7 @@ namespace KDRsReportExporter
             string[] ColumnNames = { "name", "Type" };
             List<string[]> parameters = RunSelectStatement("use " + DBName + "; " +
                  "select name, 'Type' = type_name(user_type_id) " +
-                 "from sys.parameters where object_id = object_id('dbo." + SpName + "') " +
+                 "from sys.parameters where object_id = object_id('dbo." + SelectSpName + "') " +
                  "ORDER BY parameter_id", ColumnNames);
 
             groupBoxParameters.Controls.Clear();
@@ -283,7 +287,7 @@ namespace KDRsReportExporter
             //MessageBox.Show("We are getting data");
             DataTable dt = new DataTable();
 
-            SqlCommand cmd = new SqlCommand(SpName, exp_Factory.conn);
+            SqlCommand cmd = new SqlCommand(SelectSpName, exp_Factory.conn);
             cmd.CommandType = CommandType.StoredProcedure;
 
             foreach (SqlParameter parameters in paramList)
@@ -393,7 +397,7 @@ namespace KDRsReportExporter
 
         private void comboBoxSPs_SelectedIndexChanged(object sender, EventArgs e)
         {
-            SpName = (sender as ComboBox).Text;
+            SelectSpName = (sender as ComboBox).Text;
             ParametersFactory();
         }
 
@@ -421,7 +425,7 @@ namespace KDRsReportExporter
 
             if (exp_Factory.fileName.Equals(""))
             {
-                exp_Factory.fileName = Regex.Replace(SpName, "exp_", "", RegexOptions.IgnoreCase);
+                exp_Factory.fileName = Regex.Replace(SelectSpName, "exp_", "", RegexOptions.IgnoreCase);
             }
             string fileName = exp_Factory.ExportToPDF(dt);
 
@@ -434,7 +438,7 @@ namespace KDRsReportExporter
 
             if (exp_Factory.fileName.Equals(""))
             {
-                exp_Factory.fileName = Regex.Replace(SpName, "exp_", "", RegexOptions.IgnoreCase);
+                exp_Factory.fileName = Regex.Replace(SelectSpName, "exp_", "", RegexOptions.IgnoreCase);
             }
             string fileName = exp_Factory.ExportToEXCEL(dt);
             MessageBox.Show("Excel: Exported Succsefully to :\n" + fileName);
