@@ -179,14 +179,26 @@ namespace KDRsReportExporter
             {
                 if (c.DataType == typeof(String))
                 {
-                    if (c.ColumnName.Equals("Avdelings Navn"))
+                    if (c.ColumnName.Equals("Avdelings Navn") || c.ColumnName.Equals("Rabatt Type") || c.ColumnName.Equals("AvdelingsNavn"))
                     {
                         DepartmentColumn = c.ColumnName;
                     }
                 }
-                if (c.DataType == typeof(Decimal) | c.DataType == typeof(int))
+                else
+                if (c.DataType == typeof(Decimal))
                 {
-                    dtCloned.Columns[c.ColumnName].DataType = typeof(string);
+                    dtCloned.Columns[c.ColumnName].DataType = typeof(Decimal);
+
+                    colNames.Add(c.ColumnName);
+                }
+                else if (c.DataType == typeof(int))
+                {
+                    dtCloned.Columns[c.ColumnName].DataType = typeof(int);
+                    colNames.Add(c.ColumnName);
+                }
+                else if (c.DataType == typeof(float))
+                {
+                    dtCloned.Columns[c.ColumnName].DataType = typeof(float);
                     colNames.Add(c.ColumnName);
                 }
                 //if (c.DataType == typeof(DateTime))
@@ -199,13 +211,13 @@ namespace KDRsReportExporter
             {
                 if (DepartmentColumn != "")
                 {
-                    String Departmentname = row.Field<String>("Avdelings Navn");
+                    String Departmentname = row.Field<String>(DepartmentColumn);
                     if (!lstDepartment.Equals(Departmentname))
                     {
                         DataRow row2 = dtCloned.NewRow();
                         // probalby set background color here somehow
-                        row2.SetField("Avdelings Navn", Departmentname);
-                        row.SetField("Avdelings Navn", "");
+                        row2.SetField(DepartmentColumn, Departmentname);
+                        row.SetField(DepartmentColumn, "");
 
                         dtCloned.Rows.Add(row2);
 
@@ -213,7 +225,7 @@ namespace KDRsReportExporter
                     }
                     else
                     {
-                        row.SetField("Avdelings Navn", "");
+                        row.SetField(DepartmentColumn, "");
                     }
                 }
                 dtCloned.ImportRow(row);
@@ -238,6 +250,7 @@ namespace KDRsReportExporter
                             }
                             else if (decimalCount == 2)
                             {
+                                //whatYouWant = dts.ToString("C2");
                                 whatYouWant = dts.ToString("#,##0.00");
                             }
 
@@ -445,6 +458,7 @@ namespace KDRsReportExporter
                     foreach (DataColumn c in dt.Columns)
                     {
                         PdfPCell dcell = new PdfPCell(new Phrase(r[c].ToString(), font5));
+
                         if (row_cnt % 2 == 1)
                         {
                             dcell.BackgroundColor = new BaseColor(220, 220, 220);
