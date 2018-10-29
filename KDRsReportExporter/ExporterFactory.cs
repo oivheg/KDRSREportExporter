@@ -253,8 +253,15 @@ namespace KDRsReportExporter
                                 //whatYouWant = dts.ToString("C2");
                                 whatYouWant = dts.ToString("#,##0.00");
                             }
-
-                            dr[dc] = whatYouWant;
+                            if (dr[dc].GetType() == typeof(int))
+                            {
+                                int intvalue;
+                                dr[dc] = int.TryParse(whatYouWant, out intvalue);
+                            }
+                            else
+                            {
+                                dr[dc] = whatYouWant;
+                            }
                         }
                     }
                     //if (DateNames.Contains(dc.ColumnName))
