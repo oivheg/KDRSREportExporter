@@ -240,6 +240,7 @@ namespace KDRsReportExporter
                         double value;
                         string whatYouWant = "";
                         double dts = 00;
+
                         if (double.TryParse((dr[dc]).ToString(), out value))
                         {
                             dts = Convert.ToDouble(dr[dc]);
@@ -250,19 +251,35 @@ namespace KDRsReportExporter
                             }
                             else if (decimalCount == 2)
                             {
-                                //whatYouWant = dts.ToString("C2");
                                 whatYouWant = dts.ToString("#,##0.00");
                             }
-                            if (dr[dc].GetType() == typeof(int))
-                            {
-                                int intvalue;
-                                dr[dc] = int.TryParse(whatYouWant, out intvalue);
-                            }
-                            else
-                            {
-                                dr[dc] = whatYouWant;
-                            }
+
+                            dr[dc] = whatYouWant;
                         }
+
+                        //if (double.TryParse((dr[dc]).ToString(), out value))
+                        //{
+                        //    dts = Convert.ToDouble(dr[dc]);
+
+                        //    if (decimalCount == 0)
+                        //    {
+                        //        whatYouWant = dts.ToString("#,##0");
+                        //    }
+                        //    else if (decimalCount == 2)
+                        //    {
+                        //        //whatYouWant = dts.ToString("C2");
+                        //        whatYouWant = dts.ToString("#,##0.00");
+                        //    }
+                        //    if (dr[dc].GetType() == typeof(int))
+                        //    {
+                        //        int intvalue;
+                        //        dr[dc] = int.TryParse(whatYouWant, out intvalue);
+                        //    }
+                        //    else
+                        //    {
+                        //        dr[dc] = whatYouWant;
+                        //    }
+                        //}
                     }
                     //if (DateNames.Contains(dc.ColumnName))
                     //{
