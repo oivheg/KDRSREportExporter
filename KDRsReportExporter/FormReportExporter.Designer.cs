@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReportExporter));
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.comboBoxDBs = new System.Windows.Forms.ComboBox();
@@ -43,6 +43,7 @@
             this.btnExportPDF = new System.Windows.Forms.Button();
             this.lblReportName = new System.Windows.Forms.Label();
             this.txtReportName = new System.Windows.Forms.TextBox();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.filterbox.SuspendLayout();
             this.SuspendLayout();
@@ -51,8 +52,8 @@
             // 
             this.dataGridView.AllowUserToAddRows = false;
             this.dataGridView.AllowUserToDeleteRows = false;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
-            this.dataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.dataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -62,6 +63,7 @@
             this.dataGridView.ReadOnly = true;
             this.dataGridView.Size = new System.Drawing.Size(564, 427);
             this.dataGridView.TabIndex = 0;
+            this.dataGridView.DataSourceChanged += new System.EventHandler(this.dataGridView_DataSourceChanged);
             // 
             // comboBoxDBs
             // 
@@ -155,7 +157,6 @@
             this.btnexportEXCEL.Size = new System.Drawing.Size(78, 52);
             this.btnexportEXCEL.TabIndex = 17;
             this.btnexportEXCEL.UseVisualStyleBackColor = true;
-        
             // 
             // btnExportPDF
             // 
@@ -166,7 +167,6 @@
             this.btnExportPDF.Size = new System.Drawing.Size(78, 52);
             this.btnExportPDF.TabIndex = 14;
             this.btnExportPDF.UseVisualStyleBackColor = true;
-          
             // 
             // lblReportName
             // 
@@ -184,11 +184,23 @@
             this.txtReportName.Size = new System.Drawing.Size(193, 20);
             this.txtReportName.TabIndex = 15;
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(200, 495);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(237, 23);
+            this.progressBar1.Step = 5;
+            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.progressBar1.TabIndex = 4;
+            this.progressBar1.Value = 20;
+            this.progressBar1.Visible = false;
+            // 
             // FormReportExporter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(635, 818);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.filterbox);
             this.Controls.Add(this.groupBoxParameters);
             this.Controls.Add(this.labelSPs);
@@ -222,6 +234,7 @@
         private System.Windows.Forms.Label lblReportName;
         private System.Windows.Forms.TextBox txtReportName;
         private System.Windows.Forms.Button btnExportPDF;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 

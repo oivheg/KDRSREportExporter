@@ -70,6 +70,11 @@ namespace KDRsReportExporter
             // Display the password form.
         }
 
+        private EventHandler Hideprogress()
+        {
+            throw new NotImplementedException();
+        }
+
         public void GetDepartments(CheckedListBox chcklstcdep)
         {
             string[] ColumnNames = { "ID", "Name" };
@@ -404,6 +409,7 @@ namespace KDRsReportExporter
         private void buttonExecute_Click(object sender, EventArgs e)
 
         {
+            progressBar1.Visible = true;
             dt = ExecuteSP(GetParameters());
             dataGridView.DataSource = dt;
 
@@ -462,6 +468,11 @@ namespace KDRsReportExporter
             {
                 deptListbox.SetItemChecked(i, Selected);
             }
+        }
+
+        private void dataGridView_DataSourceChanged(object sender, EventArgs e)
+        {
+            progressBar1.Visible = false;
         }
     }
 }

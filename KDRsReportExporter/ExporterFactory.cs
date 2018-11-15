@@ -253,8 +253,23 @@ namespace KDRsReportExporter
                             {
                                 whatYouWant = dts.ToString("#,##0.00");
                             }
-
-                            dr[dc] = whatYouWant;
+                            int intvalue;
+                            if (int.TryParse(whatYouWant.Trim(), out intvalue))
+                            {
+                                dr[dc] = intvalue;
+                            }
+                            else
+                            {
+                                if (dc.DataType == typeof(int))
+                                {
+                                    int.TryParse(whatYouWant, out intvalue);
+                                    dr[dc] = intvalue;
+                                }
+                                else
+                                {
+                                    dr[dc] = whatYouWant;
+                                }
+                            }
                         }
 
                         //if (double.TryParse((dr[dc]).ToString(), out value))
