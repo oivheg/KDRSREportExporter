@@ -113,6 +113,7 @@
             this.groupBoxParameters.TabIndex = 5;
             this.groupBoxParameters.TabStop = false;
             this.groupBoxParameters.Text = "Parameters";
+            this.groupBoxParameters.Enter += new System.EventHandler(this.groupBoxParameters_Enter);
             // 
             // buttonExecute
             // 

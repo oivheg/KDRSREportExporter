@@ -316,8 +316,17 @@ namespace KDRsReportExporter
                 if (paramets is System.Windows.Forms.TextBox)
                 {
                     System.Windows.Forms.TextBox tmpTextBox = paramets as System.Windows.Forms.TextBox;
-
-                    paramList.Add(new SqlParameter(tmpTextBox.Name.ToString(), tmpTextBox.Text));
+                    if (tmpTextBox.Text.Equals(""))
+                    {
+                        //SqlParameter parameter = new SqlParameter(tmpTextBox.Name.ToString(), tmpTextBox.Text);
+                        //parameter.IsNullable = true;
+                        //parameter.Value = DBNull.Value;
+                        //paramList.Add(parameter);
+                    }
+                    else
+                    {
+                        paramList.Add(new SqlParameter(tmpTextBox.Name.ToString(), tmpTextBox.Text));
+                    }
                 }
                 else if (paramets is DateTimePicker)
                 {
@@ -410,6 +419,8 @@ namespace KDRsReportExporter
 
         {
             progressBar1.Visible = true;
+            buttonExecute.Text = "Laster , Venligst vent";
+            buttonExecute.Enabled = false;
             dt = ExecuteSP(GetParameters());
             dataGridView.DataSource = dt;
 
@@ -473,6 +484,12 @@ namespace KDRsReportExporter
         private void dataGridView_DataSourceChanged(object sender, EventArgs e)
         {
             progressBar1.Visible = false;
+            buttonExecute.Enabled = true;
+            buttonExecute.Text = "HentData";
+        }
+
+        private void groupBoxParameters_Enter(object sender, EventArgs e)
+        {
         }
     }
 }
